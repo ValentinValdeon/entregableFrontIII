@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-Types';
 
 // El componente Cabera no tiene componentes hijos.
 // ESTADO: Cabecera no tiene estado.
@@ -8,23 +7,13 @@ import PropTypes from 'prop-Types';
 // Maqueta de Cabecera:
 //    h1
 //    p > span     (el span mostrará la cantidad recibida por props)
- ////////////////////////////////////////////////////////////////
 
-export default function Cabecera() {
+export default function Cabecera({estadoCarrito}) {
+  
   return (
     <header>
-        <h1>CARRITO DE COMPRAS</h1>
-        <p>
-          CANTIDAD DE PRODUCTOS <span>{itemsCount}</span>
-        </p>
+        <h1>Carrito de Compras</h1>
+        <p>Cantidad de productos: <span>{estadoCarrito}</span> </p>
     </header>
-  );
+  )
 }
- ////////////////////////////////////////////////////////////////
-Cabecera.propTypes = {
-  itemsCount: PropTypes.number,
-};
- ////////////////////////////////////////////////////////////////
-Cabecera.defaultProps = {
-  itemsCount: 0,
-};

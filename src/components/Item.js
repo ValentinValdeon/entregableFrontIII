@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
 // El componente Item no tiene componentes hijos.
 // ESTADO: Item debe tener un número para almacenar la cantidad de stock, la misma se la defina el padre a la hora de crearlo.
 // MÉTODOS: Item debe manejar el click de su boton para restar la cantidad en stock de sí mismo y a su vez poder aumentar el estado de su "abuelo" App.
@@ -9,46 +7,44 @@ import PropTypes from 'prop-types';
 //    p
 //    h5 > span    (este span debe mostrar la cantidad si es mayor a 0 "agotado" si llega a 0)
 //    button       (este boton debe permitir comprar, pero si la cantidad es menor a 0 debe estar deshabilitado y decir "Sin stock")
- ////////////////////////////////////////////////////////////////
-export default function Item({
-  description,
-  name,
-  onAddItemToCart,
-  initialStockk,
-  })
-{
-  const [stock, setStock] = useState(initialStock);
- ////////////////////////////////////////////////////////////////
-  function onClickBuy() {
-    onAddItemToCart();
-    setStock((prevState) => prevState - 1);
+
+import { useState } from "react";
+import swal from 'sweetalert';
+
+export default function Item({ data, add }) {
+  // eslint-disable-next-line no-unused-vars
+  const [stock, setStock] = useState(data);
+
+  function handleStock(item, id) {
+    function restaProd() {
+      add();
+      item.stock--;
+    }
+    if (item.id === id) {
+      item.stock > 0 ? restaProd() : 
+      swal({
+        title: "Lo lamentamos!",
+        text: "Sin stock del producto",
+        icon: "error",
+        button: "OK",
+      });
+    }
   }
- ////////////////////////////////////////////////////////////////
+
   return (
-    <div className='producto'>
-      <h3>{name}</h3>
-      <p>{description}</p>
-      <h5>
-        En stock: <span>{stock > 0 ? stock : 'agotado'}</span>
-      </h5>
-      <button disabled={stock <= 0} onClick={onClickBuy}>
-        {stock > 0 ? 'COMPRAR' : 'SIN STOCK'}
-      </button>
-    </div>
+    <>
+      {stock.map((item, index) => (
+        <div className="producto" key={index}>
+          <h3>{item.producto.nombre}</h3>
+          <p>{item.producto.descripcion}</p>
+          <h5>
+            En Stock: 
+            {item.stock > 0 ? item.stock : <span className="producto"> Sin Stock</span> }
+            
+          </h5>
+          <button onClick={() => handleStock(item, item.id)}>COMPRAR</button>
+        </div>
+      ))}
+    </>
   );
 }
- ////////////////////////////////////////////////////////////////
-Item.propTypes = {
-  description: PropTypes.string,
-  name: PropTypes.string,
-  onAddItemToCart: PropTypes.func,
-  initialStock: PropTypes.number,
-};
- ////////////////////////////////////////////////////////////////
-Item.defaultProps = {
-  description:
-    'Suma más y más kilómetros con tus Zapatillas Nike Revolution 6 Next Nature, que aportan amortiguación y confort a cada paso que des. Su capellada transpirable y suela diseñada por computadora para una mejor tracción son ideales hasta para los corredores más exigentes.',
-  name: 'Zapatillas Nike Revolution 6 Next Nature',
-  onAddItemToCart: () => {},
-  initialStock: 5,
-};
