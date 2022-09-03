@@ -24,7 +24,7 @@ export default function Item({ data, add }) {
       item.stock > 0 ? restaProd() : 
       swal({
         title: "Lo lamentamos!",
-        text: "Sin stock del producto",
+        text: "Sin stock del producto!",
         icon: "error",
         button: "OK",
       });
