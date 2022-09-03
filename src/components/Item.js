@@ -9,27 +9,16 @@
 //    button       (este boton debe permitir comprar, pero si la cantidad es menor a 0 debe estar deshabilitado y decir "Sin stock")
 
 import { useState } from "react";
-import swal from 'sweetalert';
 
 export default function Item({ data, add }) {
-  // eslint-disable-next-line no-unused-vars
   const [stock, setStock] = useState(data);
 
-  function handleStock(item, id) {
-    function restaProd() {
-      add();
-      item.stock--;
+  function restaProd(item, id) {
+      if (item.id === id && item.stock > 0) {
+          add();
+          item.stock--;
+      }
     }
-    if (item.id === id) {
-      item.stock > 0 ? restaProd() : 
-      swal({
-        title: "Lo lamentamos!",
-        text: "Sin stock del producto!",
-        icon: "error",
-        button: "OK",
-      });
-    }
-  }
 
   return (
     <>
@@ -39,10 +28,9 @@ export default function Item({ data, add }) {
           <p>{item.producto.descripcion}</p>
           <h5>
             En Stock: 
-            {item.stock > 0 ? item.stock : <span className="producto"> Sin Stock</span> }
-            
+            {item.stock > 0 ? item.stock : <span className="producto">Agotado</span> }
           </h5>
-          <button onClick={() => handleStock(item, item.id)}>COMPRAR</button>
+          <button onClick={() => restaProd(item, item.id)} disabled = {item.stock <=0 ? true : false}> {item.stock === 0 ? "Sin stock" : "Comprar"}</button>
         </div>
       ))}
     </>
